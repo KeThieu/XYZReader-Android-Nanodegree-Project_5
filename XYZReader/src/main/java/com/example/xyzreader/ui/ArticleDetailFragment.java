@@ -10,8 +10,11 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -20,8 +23,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
+import android.support.design.widget.AppBarLayout;
+import android.support.v7.widget.Toolbar;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -44,8 +52,11 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
     private View mRootView;
     private int mMutedColor = 0xFF333333;
-    private ObservableScrollView mScrollView;
-    private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
+    private NestedScrollView mScrollView;
+    private AppBarLayout mAppBarLayout;
+    private CoordinatorLayout mCoordinatorLayout;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private Toolbar mDetailToolbar;
     private ColorDrawable mStatusBarColorDrawable;
 
     private int mTopInset;
@@ -54,6 +65,8 @@ public class ArticleDetailFragment extends Fragment implements
     private int mScrollY;
     private boolean mIsCard = false;
     private int mStatusBarFullOpacityBottom;
+
+    private String mTitle;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -103,28 +116,12 @@ public class ArticleDetailFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
-        mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
-                mRootView.findViewById(R.id.draw_insets_frame_layout);
-        mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
-            @Override
-            public void onInsetsChanged(Rect insets) {
-                mTopInset = insets.top;
-            }
-        });
+        mCoordinatorLayout = (CoordinatorLayout)
+                mRootView.findViewById(R.id.root_coordinator_layout);
 
-        mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
-        mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
-            @Override
-            public void onScrollChanged() {
-                mScrollY = mScrollView.getScrollY();
-                getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
-                mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
-                updateStatusBar();
-            }
-        });
+        mScrollView = (NestedScrollView) mRootView.findViewById(R.id.scrollview);
 
         mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
-        mPhotoContainerView = mRootView.findViewById(R.id.photo_container);
 
         mStatusBarColorDrawable = new ColorDrawable(0);
 
@@ -138,38 +135,53 @@ public class ArticleDetailFragment extends Fragment implements
             }
         });
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if(getActivity().getIntent() != null) {
+                ImageView photoView = (ImageView)  mRootView.findViewById(R.id.photo);
+                photoView.setTransitionName(getString(R.string.transition_tag) + String.valueOf(mItemId));
+            }
+
+        }
+
+        mAppBarLayout = (AppBarLayout) mRootView.findViewById(R.id.photo_container_appbar);
+
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if(scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if(scrollRange + verticalOffset == 0) {
+                    //when fully collapsed, show title
+                    mCollapsingToolbarLayout.setTitle(mTitle);
+                    mDetailToolbar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.theme_primary));
+                    isShow = true;
+                } else if (isShow) {
+                    //remove the title, set color back to transparent
+                    mCollapsingToolbarLayout.setTitle("");
+                    mDetailToolbar.setBackgroundColor(Color.TRANSPARENT);
+                    isShow=false;
+                }
+            }
+        });
+
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar_layout);
+
+        mDetailToolbar = (Toolbar) mRootView.findViewById(R.id.detail_navigation_toolbar);
+        mDetailToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha );
+        mDetailToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
         bindViews();
-        updateStatusBar();
+
         return mRootView;
-    }
-
-    private void updateStatusBar() {
-        int color = 0;
-        if (mPhotoView != null && mTopInset != 0 && mScrollY > 0) {
-            float f = progress(mScrollY,
-                    mStatusBarFullOpacityBottom - mTopInset * 3,
-                    mStatusBarFullOpacityBottom - mTopInset);
-            color = Color.argb((int) (255 * f),
-                    (int) (Color.red(mMutedColor) * 0.9),
-                    (int) (Color.green(mMutedColor) * 0.9),
-                    (int) (Color.blue(mMutedColor) * 0.9));
-        }
-        mStatusBarColorDrawable.setColor(color);
-        mDrawInsetsFrameLayout.setInsetBackground(mStatusBarColorDrawable);
-    }
-
-    static float progress(float v, float min, float max) {
-        return constrain((v - min) / (max - min), 0, 1);
-    }
-
-    static float constrain(float val, float min, float max) {
-        if (val < min) {
-            return min;
-        } else if (val > max) {
-            return max;
-        } else {
-            return val;
-        }
     }
 
     private void bindViews() {
@@ -187,7 +199,9 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
-            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+            mTitle = mCursor.getString(ArticleLoader.Query.TITLE);
+
+            titleView.setText(mTitle);
             bylineView.setText(Html.fromHtml(
                     DateUtils.getRelativeTimeSpanString(
                             mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
@@ -208,7 +222,7 @@ public class ArticleDetailFragment extends Fragment implements
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 mRootView.findViewById(R.id.meta_bar)
                                         .setBackgroundColor(mMutedColor);
-                                updateStatusBar();
+
                             }
                         }
 
@@ -217,11 +231,29 @@ public class ArticleDetailFragment extends Fragment implements
 
                         }
                     });
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                scheduleStartPostponedTransition(titleView);
+            }
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
             bylineView.setText("N/A" );
             bodyView.setText("N/A");
+        }
+    }
+
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                    new ViewTreeObserver.OnPreDrawListener() {
+                        @Override
+                        public boolean onPreDraw() {
+                            sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                            getActivity().startPostponedEnterTransition();
+                            return true;
+                        }
+                    });
         }
     }
 
@@ -255,14 +287,4 @@ public class ArticleDetailFragment extends Fragment implements
         bindViews();
     }
 
-    public int getUpButtonFloor() {
-        if (mPhotoContainerView == null || mPhotoView.getHeight() == 0) {
-            return Integer.MAX_VALUE;
-        }
-
-        // account for parallax
-        return mIsCard
-                ? (int) mPhotoContainerView.getTranslationY() + mPhotoView.getHeight() - mScrollY
-                : mPhotoView.getHeight() - mScrollY;
-    }
 }

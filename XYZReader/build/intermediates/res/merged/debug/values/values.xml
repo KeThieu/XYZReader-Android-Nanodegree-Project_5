@@ -23,6 +23,7 @@
     <color name="background_floating_material_light">@android:color/white</color>
     <color name="background_material_dark">@color/material_grey_850</color>
     <color name="background_material_light">@color/material_grey_50</color>
+    <color name="black">#000000</color>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <color name="bright_foreground_disabled_material_light">#80000000</color>
     <color name="bright_foreground_inverse_material_dark">@color/bright_foreground_material_light</color>
@@ -54,7 +55,6 @@
     <color name="highlighted_text_material_light">#66009688</color>
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
-    <color name="ltgray">#ffe0e0e0</color>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
     <color name="material_blue_grey_950">#ff21272b</color>
@@ -68,6 +68,7 @@
     <color name="material_grey_850">#ff303030</color>
     <color name="material_grey_900">#ff212121</color>
     <color name="photo_placeholder">#ccc</color>
+    <color name="primaryText">#212121</color>
     <color name="primary_dark_material_dark">@android:color/black</color>
     <color name="primary_dark_material_light">@color/material_grey_600</color>
     <color name="primary_material_dark">@color/material_grey_900</color>
@@ -86,9 +87,9 @@
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
-    <color name="theme_accent">#04561A</color>
-    <color name="theme_primary">#04561A</color>
-    <color name="theme_primary_dark">#04561A</color>
+    <color name="theme_accent">#FF5252</color>
+    <color name="theme_primary">#42A5F5</color>
+    <color name="theme_primary_dark">#1976D2</color>
     <declare-styleable name="ActionBar"><attr name="navigationMode"><enum name="normal" value="0"/><enum name="listMode" value="1"/><enum name="tabMode" value="2"/></attr><attr name="displayOptions"><flag name="none" value="0"/><flag name="useLogo" value="0x1"/><flag name="showHome" value="0x2"/><flag name="homeAsUp" value="0x4"/><flag name="showTitle" value="0x8"/><flag name="showCustom" value="0x10"/><flag name="disableHome" value="0x20"/></attr><attr name="title"/><attr format="string" name="subtitle"/><attr format="reference" name="titleTextStyle"/><attr format="reference" name="subtitleTextStyle"/><attr format="reference" name="icon"/><attr format="reference" name="logo"/><attr format="reference" name="divider"/><attr format="reference" name="background"/><attr format="reference|color" name="backgroundStacked"/><attr format="reference|color" name="backgroundSplit"/><attr format="reference" name="customNavigationLayout"/><attr name="height"/><attr format="reference" name="homeLayout"/><attr format="reference" name="progressBarStyle"/><attr format="reference" name="indeterminateProgressStyle"/><attr format="dimension" name="progressBarPadding"/><attr name="homeAsUpIndicator"/><attr format="dimension" name="itemPadding"/><attr format="boolean" name="hideOnContentScroll"/><attr format="dimension" name="contentInsetStart"/><attr format="dimension" name="contentInsetEnd"/><attr format="dimension" name="contentInsetLeft"/><attr format="dimension" name="contentInsetRight"/><attr format="dimension" name="elevation"/><attr format="reference" name="popupTheme"/></declare-styleable>
     <declare-styleable name="ActionBarLayout"><attr name="android:layout_gravity"/></declare-styleable>
     <declare-styleable name="ActionMenuItemView"><attr name="android:minWidth"/></declare-styleable>
@@ -106,7 +107,6 @@
     <declare-styleable name="CompoundButton"><attr name="android:button"/><attr format="color" name="buttonTint"/><attr name="buttonTintMode"><enum name="src_over" value="3"/><enum name="src_in" value="5"/><enum name="src_atop" value="9"/><enum name="multiply" value="14"/><enum name="screen" value="15"/></attr></declare-styleable>
     <declare-styleable name="CoordinatorLayout"><attr format="reference" name="keylines"/><attr format="reference" name="statusBarBackground"/></declare-styleable>
     <declare-styleable name="CoordinatorLayout_LayoutParams"><attr name="android:layout_gravity"/><attr format="string" name="layout_behavior"/><attr format="reference" name="layout_anchor"/><attr format="integer" name="layout_keyline"/><attr name="layout_anchorGravity"><flag name="top" value="0x30"/><flag name="bottom" value="0x50"/><flag name="left" value="0x03"/><flag name="right" value="0x05"/><flag name="center_vertical" value="0x10"/><flag name="fill_vertical" value="0x70"/><flag name="center_horizontal" value="0x01"/><flag name="fill_horizontal" value="0x07"/><flag name="center" value="0x11"/><flag name="fill" value="0x77"/><flag name="clip_vertical" value="0x80"/><flag name="clip_horizontal" value="0x08"/><flag name="start" value="0x00800003"/><flag name="end" value="0x00800005"/></attr></declare-styleable>
-    <declare-styleable name="DrawInsetsFrameLayout"><attr format="color|reference" name="insetBackground"/></declare-styleable>
     <declare-styleable name="DrawerArrowToggle"><attr format="color" name="color"/><attr format="boolean" name="spinBars"/><attr format="dimension" name="drawableSize"/><attr format="dimension" name="gapBetweenBars"/><attr format="dimension" name="arrowHeadLength"/><attr format="dimension" name="arrowShaftLength"/><attr format="dimension" name="barLength"/><attr format="dimension" name="thickness"/></declare-styleable>
     <declare-styleable name="FloatingActionButton"><attr name="android:background"/><attr name="backgroundTint"/><attr name="backgroundTintMode"/><attr format="color" name="rippleColor"/><attr name="fabSize"><enum name="normal" value="0"/><enum name="mini" value="1"/></attr><attr name="elevation"/><attr format="dimension" name="pressedTranslationZ"/><attr format="dimension" name="borderWidth"/></declare-styleable>
     <declare-styleable name="ForegroundLinearLayout"><attr name="android:foreground"/><attr name="android:foregroundGravity"/><attr format="boolean" name="foregroundInsidePadding"/></declare-styleable>
@@ -244,7 +244,7 @@
     <dimen name="detail_title_text_size">32sp</dimen>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <dimen name="fab_elevation">2dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
@@ -303,12 +303,21 @@
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="character_counter_pattern" translatable="false">%1$d/%2$d</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="transition_tag" translatable="false">transition</string>
     <string name="up">Up</string>
     <string name="welcome_xyz_reader">Welcome to XYZ Reader!</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>
     <style name="Animation.AppCompat.DropDownUp" parent="Base.Animation.AppCompat.DropDownUp"/>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="colorAccent">@color/theme_accent</item>
+
+    </style>
+    <style name="AppTheme.DetailAct" parent="@style/AppTheme"/>
+    <style name="AppTheme.MainAct" parent="@style/AppTheme"/>
     <style name="Base.AlertDialog.AppCompat" parent="android:Widget">
         <item name="android:layout">@layout/abc_alert_dialog_material</item>
         <item name="listLayout">@layout/abc_select_dialog_material</item>
@@ -1254,6 +1263,9 @@
         <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
+    <style name="Body1Style" parent="Base.TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/black</item>
+    </style>
     <style name="CardView">
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
         <item name="cardCornerRadius">@dimen/cardview_default_radius</item>
@@ -1525,19 +1537,14 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="Theme.Bacon" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/theme_primary</item>
-        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
-        <item name="colorAccent">@color/theme_accent</item>
-    </style>
-    <style name="Theme.Bacon.Detail">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
     <style name="ThemeOverlay.AppCompat" parent="Base.ThemeOverlay.AppCompat"/>
     <style name="ThemeOverlay.AppCompat.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Dark" parent="Base.ThemeOverlay.AppCompat.Dark"/>
     <style name="ThemeOverlay.AppCompat.Dark.ActionBar" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="ThemeOverlay.AppCompat.Light" parent="Base.ThemeOverlay.AppCompat.Light"/>
+    <style name="TitleStyle" parent="Base.TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@color/black</item>
+    </style>
     <style name="Widget.AppCompat.ActionBar" parent="Base.Widget.AppCompat.ActionBar">
     </style>
     <style name="Widget.AppCompat.ActionBar.Solid" parent="Base.Widget.AppCompat.ActionBar.Solid">

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "C:\\Users\\Kenneth\\AndroidStudioProjects\\XYZReader-Project 5\\XYZReader\\build\\intermediates\\res\\merged\\debug\\transition-v21\\detail_fragment_exit_transition.xml",
+        "source": "C:\\Users\\Kenneth\\AndroidStudioProjects\\XYZReader-Project 5\\XYZReader\\src\\main\\res\\transition-v21\\detail_fragment_exit_transition.xml"
+    },
+    {
+        "merged": "C:\\Users\\Kenneth\\AndroidStudioProjects\\XYZReader-Project 5\\XYZReader\\build\\intermediates\\res\\merged\\debug\\transition-v21\\detail_fragment_enter_transition.xml",
+        "source": "C:\\Users\\Kenneth\\AndroidStudioProjects\\XYZReader-Project 5\\XYZReader\\src\\main\\res\\transition-v21\\detail_fragment_enter_transition.xml"
+    }
+]

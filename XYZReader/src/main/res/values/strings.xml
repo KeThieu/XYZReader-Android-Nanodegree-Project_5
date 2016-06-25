@@ -9,4 +9,6 @@
 
     <string name="up">Up</string>
 
+    <string name="transition_tag" translatable="false">transition</string>
+
 </resources>
